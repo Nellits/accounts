@@ -12,7 +12,8 @@ WORKDIR /app
 COPY service/ ./service/
 COPY --from=frontend-build /build/dist ./frontend/dist
 WORKDIR /app/service
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt \
+  && chmod +x start.sh
 ENV FRONTEND_DIST=../frontend/dist
 EXPOSE 8000
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["./start.sh"]
