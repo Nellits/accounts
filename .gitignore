@@ -1,0 +1,15 @@
+keys/
+*.pem
+service/.env
+service/uploads/
+service/**/__pycache__/
+service/**/*.pyc
+frontend/node_modules/
+frontend/dist/
+.DS_Store
+*.db
+.venv/
+venv/
+
+# Local RSA keys (do not commit)
+keys/
