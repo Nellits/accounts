@@ -13,3 +13,8 @@ venv/
 
 # Local RSA keys (do not commit)
 keys/
+
+packages/**/egg-info/
+packages/**/__pycache__/
+*.egg-info/
+frontend/tsconfig.tsbuildinfo

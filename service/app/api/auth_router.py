@@ -86,14 +86,15 @@ def _issue_token(user: User) -> str:
 
 @router.post("/register", response_model=UserOut)
 def register(body: RegisterIn, db: Session = Depends(get_db)):
-    if db.query(User).filter(User.email == body.email).first():
+    email = body.email.strip().lower()
+    if db.query(User).filter(User.email == email).first():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="An account with this email already exists",
         )
     user = User(
-        email=body.email,
-        name=body.name or body.email.split("@")[0],
+        email=email,
+        name=body.name or email.split("@")[0],
         password_hash=hash_password(body.password),
     )
     db.add(user)
@@ -110,7 +111,8 @@ def register(body: RegisterIn, db: Session = Depends(get_db)):
 
 @router.post("/login", response_model=UserOut)
 def login(body: LoginIn, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.email == body.email).first()
+    email = body.email.strip().lower()
+    user = db.query(User).filter(User.email == email).first()
     if not user or not user.password_hash or not verify_password(body.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -125,7 +127,8 @@ def login(body: LoginIn, db: Session = Depends(get_db)):
 @router.post("/token", response_model=TokenOut)
 def token(body: TokenIn, db: Session = Depends(get_db)):
     """Email + password -> JWT (Bearer). For mobile / native clients."""
-    user = db.query(User).filter(User.email == body.email).first()
+    email = body.email.strip().lower()
+    user = db.query(User).filter(User.email == email).first()
     if not user or not user.password_hash or not verify_password(body.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
