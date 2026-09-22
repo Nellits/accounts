@@ -1,7 +1,7 @@
 """Copy users from a TV Tracker database into Accounts, preserving ids.
 
 Usage:
-  # From service/ with both DATABASE_URL (accounts) and TVTRACKER_DATABASE_URL set:
+  # From backend/ with both DATABASE_URL (accounts) and TVTRACKER_DATABASE_URL set:
   python scripts/migrate_from_tvtracker.py
 
   # Or pass URLs:

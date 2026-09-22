@@ -9,7 +9,7 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 DATABASE_URL_ERROR = (
-    "DATABASE_URL is required. Set it in service/.env or deployment environment "
+    "DATABASE_URL is required. Set it in backend/.env or deployment environment "
     "(example: postgresql://postgres:postgres@localhost:5432/accounts)."
 )
 

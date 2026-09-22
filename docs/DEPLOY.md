@@ -35,7 +35,7 @@ meanwhile at its Railway domain.
 ## 2. Database
 
 `DATABASE_URL` is a Railway reference to `${{accounts-db.DATABASE_URL}}`, so it follows the database
-service rather than a hardcoded host. Schema migrates on each start via `service/start.sh`
+service rather than a hardcoded host. Schema migrates on each start via `backend/start.sh`
 (`alembic upgrade head`).
 
 Note: these references bind to a service **id**. If you ever delete and recreate `accounts-db`, re-set
@@ -46,7 +46,7 @@ Note: these references bind to a service **id**. If you ever delete and recreate
 RSA keys live in Railway env as `AUTH_RSA_PRIVATE_KEY` / `AUTH_RSA_PUBLIC_KEY` (`AUTH_KEY_ID=accounts-1`).
 PEM newlines may be stored escaped as `\n`; the service converts them on load.
 
-Rotate by regenerating with `python service/scripts/generate_keys.py` and updating those variables.
+Rotate by regenerating with `python backend/scripts/generate_keys.py` and updating those variables.
 Rotating invalidates every existing session.
 
 ## 4. Environment (set on the `accounts` service)

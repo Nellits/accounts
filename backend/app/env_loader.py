@@ -1,4 +1,4 @@
-"""Load service/.env early regardless of CWD."""
+"""Load backend/.env early regardless of CWD."""
 from pathlib import Path
 
 from dotenv import load_dotenv

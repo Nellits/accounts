@@ -8,7 +8,7 @@ One login on the web (session cookie on the parent domain). Mobile apps use `POS
 
 | Path | Purpose |
 |------|---------|
-| `service/` | FastAPI identity API (RS256 JWT, JWKS, users, avatars) |
+| `backend/` | FastAPI identity API (RS256 JWT, JWKS, users, avatars) |
 | `frontend/` | Hosted login / register / reset UI |
 | `packages/auth/` | Python FastAPI dependency for app backends |
 | `packages/auth-js/` | TypeScript helpers for app frontends |
@@ -18,14 +18,14 @@ One login on the web (session cookie on the parent domain). Mobile apps use `POS
 
 ```bash
 # 1) Keys (optional locally — ephemeral key is generated if unset)
-python service/scripts/generate_keys.py
+python backend/scripts/generate_keys.py
 
 # 2) Database
 docker compose up -d db
-cp service/.env.example service/.env
+cp backend/.env.example backend/.env
 # edit DATABASE_URL if needed
 
-cd service && pip install -r requirements.txt
+cd backend && pip install -r requirements.txt
 alembic upgrade head
 uvicorn app.main:app --reload --port 8001
 

@@ -1,9 +1,9 @@
 keys/
 *.pem
-service/.env
-service/uploads/
-service/**/__pycache__/
-service/**/*.pyc
+backend/.env
+backend/uploads/
+backend/**/__pycache__/
+backend/**/*.pyc
 frontend/node_modules/
 frontend/dist/
 .DS_Store

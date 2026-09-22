@@ -9,9 +9,9 @@ RUN npm run build
 # Stage 2: API + SPA
 FROM python:3.12-slim
 WORKDIR /app
-COPY service/ ./service/
+COPY backend/ ./backend/
 COPY --from=frontend-build /build/dist ./frontend/dist
-WORKDIR /app/service
+WORKDIR /app/backend
 RUN pip install --no-cache-dir -r requirements.txt \
   && chmod +x start.sh
 ENV FRONTEND_DIST=../frontend/dist

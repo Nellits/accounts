@@ -78,7 +78,7 @@ app.mount("/uploads", StaticFiles(directory=str(UPLOADS_ROOT)), name="uploads")
 
 _FRONTEND_DIST = os.getenv("FRONTEND_DIST", "").strip()
 if not _FRONTEND_DIST:
-    # Default: repo frontend/dist relative to service/
+    # Default: repo frontend/dist relative to backend/
     candidate = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
     if candidate.is_dir():
         _FRONTEND_DIST = str(candidate)
