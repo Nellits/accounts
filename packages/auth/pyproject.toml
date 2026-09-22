@@ -1,7 +1,7 @@
 [project]
-name = "nellits-auth"
+name = "auth"
 version = "0.1.0"
-description = "FastAPI dependency for validating Nellits Accounts JWTs via JWKS"
+description = "FastAPI dependency for validating Accounts JWTs via JWKS"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
@@ -17,4 +17,4 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["nellits_auth*"]
+include = ["auth*"]

@@ -1,4 +1,4 @@
-"""Identity user model (shared across all Nellits apps)."""
+"""Identity user model (shared across apps)."""
 from sqlalchemy import Boolean, Column, DateTime, Integer, String
 
 from app.db import Base

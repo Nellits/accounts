@@ -1,4 +1,4 @@
-"""Nellits Accounts: identity API + hosted login SPA."""
+"""Accounts: identity API + hosted login SPA."""
 import logging
 import os
 from contextlib import asynccontextmanager
@@ -39,16 +39,14 @@ _origins = [
     "http://127.0.0.1:8000",
     "http://localhost:8001",
     "http://127.0.0.1:8001",
-    "https://tv.nellits.com",
-    "https://accounts.nellits.com",
 ]
 _cors = os.getenv("CORS_ORIGINS", "").strip()
 if _cors:
     _origins.extend(s.strip() for s in _cors.split(",") if s.strip())
 
 app = FastAPI(
-    title="Nellits Accounts",
-    description="Shared identity service for Nellits apps",
+    title="Accounts",
+    description="Shared identity service for sibling apps",
     lifespan=lifespan,
     default_response_class=ORJSONResponse,
 )

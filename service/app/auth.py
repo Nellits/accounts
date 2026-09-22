@@ -15,11 +15,11 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import APIKeyCookie, HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 
-COOKIE_NAME = os.getenv("AUTH_COOKIE_NAME", "nellits_session")
+COOKIE_NAME = os.getenv("AUTH_COOKIE_NAME", "accounts_session")
 ALGORITHM = "RS256"
 ACCESS_TOKEN_EXPIRE_DAYS = int(os.getenv("ACCESS_TOKEN_EXPIRE_DAYS", "30"))
-ISSUER = os.getenv("AUTH_ISSUER", "https://accounts.nellits.com")
-COOKIE_DOMAIN = os.getenv("AUTH_COOKIE_DOMAIN", "")  # e.g. ".nellits.com"; empty for localhost
+ISSUER = os.getenv("AUTH_ISSUER", "http://localhost:8001")
+COOKIE_DOMAIN = os.getenv("AUTH_COOKIE_DOMAIN", "")  # e.g. ".example.com"; empty for localhost
 COOKIE_SECURE = os.getenv("AUTH_COOKIE_SECURE", "true").lower() in ("1", "true", "yes")
 
 bearer_scheme = HTTPBearer(auto_error=False)
@@ -48,7 +48,7 @@ def _load_keys() -> tuple[Any, Any, str]:
     """Return (private_key, public_key, kid). Keys from PEM env/files or generated for dev."""
     private_pem = os.getenv("AUTH_RSA_PRIVATE_KEY", "").strip()
     public_pem = os.getenv("AUTH_RSA_PUBLIC_KEY", "").strip()
-    kid = os.getenv("AUTH_KEY_ID", "nellits-1")
+    kid = os.getenv("AUTH_KEY_ID", "accounts-1")
 
     private_path = os.getenv("AUTH_RSA_PRIVATE_KEY_PATH", "").strip()
     public_path = os.getenv("AUTH_RSA_PUBLIC_KEY_PATH", "").strip()
@@ -206,7 +206,7 @@ def cookie_kwargs(max_age: int | None = None) -> dict:
 
 
 def redirect_uri_allowed(redirect_uri: str) -> bool:
-    """Allowlist redirects to https://*.nellits.com (and localhost in dev)."""
+    """Allow redirects under AUTH_COOKIE_DOMAIN, localhost, or AUTH_REDIRECT_ALLOWLIST."""
     from urllib.parse import urlparse
 
     allowed_extra = [
@@ -219,8 +219,10 @@ def redirect_uri_allowed(redirect_uri: str) -> bool:
     if not parsed.scheme or not parsed.netloc:
         return False
     host = parsed.hostname or ""
-    if parsed.scheme == "https" and (host == "nellits.com" or host.endswith(".nellits.com")):
-        return True
+    if COOKIE_DOMAIN:
+        root = COOKIE_DOMAIN.lstrip(".")
+        if parsed.scheme == "https" and (host == root or host.endswith("." + root)):
+            return True
     if parsed.scheme in ("http", "https") and host in ("localhost", "127.0.0.1"):
         return True
     for prefix in allowed_extra:

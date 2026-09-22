@@ -1,4 +1,4 @@
-"""Public profile lookup for other Nellits apps (friends, etc.)."""
+"""Public profile lookup for other apps (friends, etc.)."""
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 

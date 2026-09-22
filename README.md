@@ -1,8 +1,8 @@
-# Nellits Accounts
+# Accounts
 
-Shared identity service for all Nellits apps (`accounts.nellits.com`). Repo: [Nellits/accounts](https://github.com/Nellits/accounts).
+Shared identity service for sibling apps. Hosted at whatever domain you configure (today: `accounts.nellits.com`).
 
-One login on the web (session cookie on `.nellits.com`). Mobile apps use `POST /api/auth/token` and send `Authorization: Bearer …`.
+One login on the web (session cookie on the parent domain). Mobile apps use `POST /api/auth/token` and send `Authorization: Bearer …`.
 
 ## Layout
 
@@ -10,8 +10,8 @@ One login on the web (session cookie on `.nellits.com`). Mobile apps use `POST /
 |------|---------|
 | `service/` | FastAPI identity API (RS256 JWT, JWKS, users, avatars) |
 | `frontend/` | Hosted login / register / reset UI |
-| `packages/nellits_auth/` | Python FastAPI dependency for app backends |
-| `packages/nellits-auth-js/` | TypeScript helpers for app frontends |
+| `packages/auth/` | Python FastAPI dependency for app backends |
+| `packages/auth-js/` | TypeScript helpers for app frontends |
 | `docs/DEPLOY.md` | Railway + DNS + user migration |
 
 ## Quick local start
@@ -41,7 +41,11 @@ JWKS: `http://localhost:8001/.well-known/jwks.json`
 Backend:
 
 ```python
-from nellits_auth import CurrentUserId
+from auth import CurrentUserId
+```
+
+```bash
+pip install "auth @ git+https://github.com/Nellits/accounts.git@main#subdirectory=packages/auth"
 ```
 
 Env on each app:
@@ -49,6 +53,7 @@ Env on each app:
 ```
 AUTH_ISSUER_URL=https://accounts.nellits.com
 AUTH_JWKS_URL=https://accounts.nellits.com/.well-known/jwks.json
+AUTH_COOKIE_NAME=accounts_session
 ```
 
-Frontend: set `VITE_ACCOUNTS_URL` and use `@nellits/auth` helpers (`getMe`, `redirectToLogin`, `logout`).
+Frontend: set `VITE_ACCOUNTS_URL` and use the `auth` package helpers (`getMe`, `redirectToLogin`, `logout`).

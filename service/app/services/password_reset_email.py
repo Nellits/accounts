@@ -19,8 +19,8 @@ def send_password_reset_email(to_email: str, reset_url: str) -> None:
         return
 
     resend.api_key = api_key
-    from_addr = os.getenv("EMAIL_FROM", "noreply@nellits.com").strip()
-    app_name = os.getenv("APP_NAME", "Nellits")
+    from_addr = os.getenv("EMAIL_FROM", "noreply@localhost").strip()
+    app_name = os.getenv("APP_NAME", "Accounts")
 
     resend.Emails.send({
         "from": from_addr,

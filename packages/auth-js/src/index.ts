@@ -1,11 +1,11 @@
 /**
- * Browser helpers for Nellits Accounts (shared cookie SSO on *.nellits.com).
+ * Browser helpers for Accounts (shared cookie SSO across sibling apps).
  *
  * Configure via:
- *   VITE_ACCOUNTS_URL=https://accounts.nellits.com
+ *   VITE_ACCOUNTS_URL=https://accounts.example.com
  */
 
-export type NellitsAuthUser = {
+export type AuthUser = {
   id: number;
   email: string | null;
   name: string | null;
@@ -21,7 +21,10 @@ function accountsBase(): string {
       (import.meta as ImportMeta & { env?: Record<string, string> }).env?.VITE_ACCOUNTS_URL) ||
     (typeof process !== "undefined" && process.env?.VITE_ACCOUNTS_URL) ||
     "";
-  return (raw || "https://accounts.nellits.com").replace(/\/$/, "");
+  if (!raw) {
+    throw new Error("VITE_ACCOUNTS_URL is required");
+  }
+  return raw.replace(/\/$/, "");
 }
 
 async function parseError(res: Response): Promise<string> {
@@ -41,7 +44,7 @@ export function redirectToLogin(redirectUri?: string): void {
   window.location.href = loginUrl(uri);
 }
 
-export async function getMe(): Promise<NellitsAuthUser> {
+export async function getMe(): Promise<AuthUser> {
   const res = await fetch(`${accountsBase()}/api/auth/me`, {
     credentials: "include",
     headers: { "Content-Type": "application/json" },
@@ -50,7 +53,7 @@ export async function getMe(): Promise<NellitsAuthUser> {
   return res.json();
 }
 
-export async function login(email: string, password: string): Promise<NellitsAuthUser> {
+export async function login(email: string, password: string): Promise<AuthUser> {
   const res = await fetch(`${accountsBase()}/api/auth/login`, {
     method: "POST",
     credentials: "include",
@@ -65,7 +68,7 @@ export async function register(
   email: string,
   password: string,
   name?: string
-): Promise<NellitsAuthUser> {
+): Promise<AuthUser> {
   const res = await fetch(`${accountsBase()}/api/auth/register`, {
     method: "POST",
     credentials: "include",
@@ -87,7 +90,7 @@ export async function logout(): Promise<void> {
 export async function changePassword(
   currentPassword: string,
   newPassword: string
-): Promise<NellitsAuthUser> {
+): Promise<AuthUser> {
   const res = await fetch(`${accountsBase()}/api/auth/change-password`, {
     method: "POST",
     credentials: "include",
@@ -115,7 +118,7 @@ export async function forgotPassword(email: string): Promise<{ message: string }
 export async function updateMe(payload: {
   name?: string;
   theme?: "light" | "dark";
-}): Promise<NellitsAuthUser> {
+}): Promise<AuthUser> {
   const res = await fetch(`${accountsBase()}/api/auth/me`, {
     method: "PATCH",
     credentials: "include",

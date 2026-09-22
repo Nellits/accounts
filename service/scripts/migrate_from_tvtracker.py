@@ -1,4 +1,4 @@
-"""Copy users from a TV Tracker database into Nellits Accounts, preserving ids.
+"""Copy users from a TV Tracker database into Accounts, preserving ids.
 
 Usage:
   # From service/ with both DATABASE_URL (accounts) and TVTRACKER_DATABASE_URL set:
@@ -7,7 +7,7 @@ Usage:
   # Or pass URLs:
   python scripts/migrate_from_tvtracker.py \\
     --source postgresql://.../tvtracker \\
-    --dest postgresql://.../nellits_accounts
+    --dest postgresql://.../accounts
 
 Admin ids: set ADMIN_USER_IDS=1,2 (same as tvtracker) to mark is_admin.
 """

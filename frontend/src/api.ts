@@ -69,16 +69,12 @@ export async function resetPassword(token: string, password: string): Promise<{ 
   return res.json();
 }
 
-/** Allow only *.nellits.com and localhost redirects. */
+/** Soft check for absolute http(s) URLs; server /api/auth/redirect is authoritative. */
 export function safeRedirect(redirectUri: string | null): string | null {
   if (!redirectUri) return null;
   try {
     const u = new URL(redirectUri);
-    const host = u.hostname;
-    if (u.protocol === "https:" && (host === "nellits.com" || host.endsWith(".nellits.com"))) {
-      return redirectUri;
-    }
-    if ((u.protocol === "http:" || u.protocol === "https:") && (host === "localhost" || host === "127.0.0.1")) {
+    if (u.protocol === "http:" || u.protocol === "https:") {
       return redirectUri;
     }
   } catch {
@@ -88,6 +84,10 @@ export function safeRedirect(redirectUri: string | null): string | null {
 }
 
 export function afterAuthRedirect(redirectUri: string | null) {
-  const safe = safeRedirect(redirectUri);
-  window.location.href = safe || "/login";
+  if (!redirectUri) {
+    window.location.href = "/login";
+    return;
+  }
+  // Server enforces AUTH_COOKIE_DOMAIN / AUTH_REDIRECT_ALLOWLIST
+  window.location.href = `/api/auth/redirect?redirect_uri=${encodeURIComponent(redirectUri)}`;
 }

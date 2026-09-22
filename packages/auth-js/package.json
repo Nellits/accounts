@@ -1,7 +1,7 @@
 {
-  "name": "@nellits/auth",
+  "name": "auth",
   "version": "0.1.0",
-  "description": "Browser helpers for Nellits Accounts SSO",
+  "description": "Browser helpers for Accounts SSO",
   "type": "module",
   "main": "src/index.ts",
   "exports": {

@@ -1,1 +1,1 @@
-"""Nellits Accounts identity service."""
+"""Accounts identity service."""

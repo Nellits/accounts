@@ -1,4 +1,4 @@
-"""FastAPI dependencies that validate Nellits Accounts JWTs (cookie or Bearer)."""
+"""FastAPI dependencies that validate Accounts JWTs (cookie or Bearer)."""
 from __future__ import annotations
 
 import os
@@ -11,9 +11,9 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import APIKeyCookie, HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 
-COOKIE_NAME = os.getenv("AUTH_COOKIE_NAME", "nellits_session")
+COOKIE_NAME = os.getenv("AUTH_COOKIE_NAME", "accounts_session")
 ALGORITHM = "RS256"
-DEFAULT_ISSUER = os.getenv("AUTH_ISSUER_URL", os.getenv("AUTH_ISSUER", "https://accounts.nellits.com"))
+DEFAULT_ISSUER = os.getenv("AUTH_ISSUER_URL", os.getenv("AUTH_ISSUER", "http://localhost:8001"))
 DEFAULT_JWKS = os.getenv(
     "AUTH_JWKS_URL",
     f"{DEFAULT_ISSUER.rstrip('/')}/.well-known/jwks.json",
@@ -27,7 +27,7 @@ _JWKS_TTL_SECONDS = int(os.getenv("AUTH_JWKS_CACHE_SECONDS", "3600"))
 
 
 @dataclass(frozen=True)
-class NellitsUser:
+class AuthUser:
     id: int
     email: str | None = None
     is_admin: bool = False
@@ -109,7 +109,7 @@ def _decode_token(token: str) -> dict:
 def get_current_user(
     creds: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer_scheme)] = None,
     cookie: Annotated[str | None, Depends(cookie_scheme)] = None,
-) -> NellitsUser:
+) -> AuthUser:
     token = None
     if creds and creds.credentials:
         token = creds.credentials
@@ -129,21 +129,21 @@ def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token subject",
         ) from e
-    return NellitsUser(
+    return AuthUser(
         id=uid,
         email=payload.get("email"),
         is_admin=bool(payload.get("is_admin")),
     )
 
 
-def get_current_user_id(user: Annotated[NellitsUser, Depends(get_current_user)]) -> int:
+def get_current_user_id(user: Annotated[AuthUser, Depends(get_current_user)]) -> int:
     return user.id
 
 
-def require_admin(user: Annotated[NellitsUser, Depends(get_current_user)]) -> None:
+def require_admin(user: Annotated[AuthUser, Depends(get_current_user)]) -> None:
     if not user.is_admin:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
 
-CurrentUser = Annotated[NellitsUser, Depends(get_current_user)]
+CurrentUser = Annotated[AuthUser, Depends(get_current_user)]
 CurrentUserId = Annotated[int, Depends(get_current_user_id)]

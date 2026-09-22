@@ -15,9 +15,9 @@ export default function App() {
   return (
     <div className="shell">
       <header className="brand">
-        <span className="logo">N</span>
+        <span className="logo">A</span>
         <div>
-          <strong>Nellits</strong>
+          <strong>Accounts</strong>
           <div className="muted">One account for all apps</div>
         </div>
       </header>
