@@ -1,6 +1,6 @@
 # Nellits Accounts
 
-Shared identity service for all Nellits apps (`accounts.nellits.com`).
+Shared identity service for all Nellits apps (`accounts.nellits.com`). Repo: [Nellits/accounts](https://github.com/Nellits/accounts).
 
 One login on the web (session cookie on `.nellits.com`). Mobile apps use `POST /api/auth/token` and send `Authorization: Bearer …`.
 

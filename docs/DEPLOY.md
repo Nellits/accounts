@@ -12,7 +12,7 @@ Add this CNAME at your DNS provider for `nellits.com`:
 |------|------|-------|
 | `accounts` | CNAME | `9qdt7krf.up.railway.app` |
 
-Confirm the target anytime with `cd nellits-accounts && railway domain`.
+Confirm the target anytime with `railway domain` from this repo.
 
 Until DNS propagates, `https://accounts.nellits.com` will not resolve. Cookie SSO (`Domain=.nellits.com`) only works over HTTPS on that host.
 

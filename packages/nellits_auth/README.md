@@ -5,9 +5,9 @@ FastAPI dependency that validates JWTs issued by **Nellits Accounts** using JWKS
 ## Install
 
 ```bash
-pip install "nellits-auth @ git+https://github.com/YOUR_ORG/nellits-accounts.git#subdirectory=packages/nellits_auth"
+pip install "nellits-auth @ git+https://github.com/Nellits/accounts.git@main#subdirectory=packages/nellits_auth"
 # or local editable:
-pip install -e ../nellits-accounts/packages/nellits_auth
+pip install -e ../accounts/packages/nellits_auth
 ```
 
 ## Env
