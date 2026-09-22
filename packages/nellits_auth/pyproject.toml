@@ -1,0 +1,20 @@
+[project]
+name = "nellits-auth"
+version = "0.1.0"
+description = "FastAPI dependency for validating Nellits Accounts JWTs via JWKS"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.109.0",
+  "httpx>=0.26.0",
+  "python-jose[cryptography]>=3.3.0",
+  "cryptography>=42.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nellits_auth*"]

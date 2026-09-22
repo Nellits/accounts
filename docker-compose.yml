@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nellits_accounts
+    ports:
+      - "5433:5432"
+    volumes:
+      - accounts_pg:/var/lib/postgresql/data
+
+  accounts:
+    build: .
+    ports:
+      - "8001:8000"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/nellits_accounts
+      AUTH_ISSUER: http://localhost:8001
+      AUTH_COOKIE_DOMAIN: ""
+      AUTH_COOKIE_SECURE: "false"
+      PASSWORD_RESET_FRONTEND_URL: http://localhost:5175
+      CORS_ORIGINS: http://localhost:5173,http://localhost:5175,http://tv.nellits.com
+    depends_on:
+      - db
+
+volumes:
+  accounts_pg:
